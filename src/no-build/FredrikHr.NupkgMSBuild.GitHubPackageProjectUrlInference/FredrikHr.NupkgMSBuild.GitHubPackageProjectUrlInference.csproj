@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project Sdk="Microsoft.Build.NoTargets">
+
+  <PropertyGroup>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <IsPackable>true</IsPackable>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>
+      Adds a new custom target into the MSBuild pipeline that sets the NuGet package Project URL to the GitHub repository URL.
+      The GitHub repository URL is determined by stripping the trailing '.git' from the Repository Git clone URL.
+    </Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub">
+      <PrivateAssets>none</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="build\Package.targets" Pack="true">
+      <PackagePath>build\$(PackageId).targets;buildMultiTargeting\$(PackageId).targets</PackagePath>
+    </Content>
+  </ItemGroup>
+
+</Project>

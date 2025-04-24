@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project Sdk="Microsoft.Build.NoTargets">
+
+  <PropertyGroup>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <IsPackable>true</IsPackable>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>
+      Adds a new custom target into the MSBuild pipeline that enables you to pack a PackageReference into the NuGet package of your project.
+      This allows you to 'embed' dependencies into your NuGet for scenarios where you need to ship your dependencies bundled with your own package.
+
+      You use this feature by adding the Pack=true metadata on a PackageReference item in your project file. Likely, you will also want to add PrivateAssets=all to the same dependency, since bundled dependencies should not be declared as external dependencies for the package.
+    </Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="build\Package.targets" Pack="true">
+      <PackagePath>build\$(PackageId).targets;buildMultiTargeting\$(PackageId).targets</PackagePath>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

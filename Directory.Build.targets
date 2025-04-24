@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+
+  <Import Project="$(MSBuildThisFileDirectory)src\no-build\FredrikHr.NupkgMSBuild.GitHubPackageProjectUrlInference\build\Package.targets" />
+
+  <Target
+    Name="InstallNupkgToRestorePackagesPath"
+    AfterTargets="Pack"
+    Condition="'$(RestorePackagesPath)' != ''"
+    Inputs="@(NuGetPackOutput->WithMetadataValue('Extension', '.nupkg'))"
+    Outputs="@(NuGetPackOutput->WithMetadataValue('Extension', '.nupkg')->'$(RestorePackagesPath)\$(PackageId)\$(PackageVersion)\%(Filename)%(Extension)')"
+  >
+    <GetFileHash
+      Files="@(NuGetPackOutput->WithMetadataValue('Extension', '.nupkg'))"
+      Algorithm="SHA512"
+      MetadataName="FileHashSha512"
+      HashEncoding="base64"
+    >
+      <Output TaskParameter="Items" ItemName="NuGetPackNupkgOutputWithHash" />
+    </GetFileHash>
+
+    <RemoveDir
+      Directories="$(RestorePackagesPath)\$(PackageId)\$(PackageVersion)"
+      Condition="Exists('$(RestorePackagesPath)\$(PackageId)\$(PackageVersion)')"
+    />
+    <Copy
+      SourceFiles="@(NuGetPackOutput->WithMetadataValue('Extension', '.nupkg'))"
+      DestinationFiles="@(NuGetPackOutput->WithMetadataValue('Extension', '.nupkg')->'$(RestorePackagesPath)\$(PackageId)\$(PackageVersion)\%(Filename)%(Extension)')"
+    >
+      <Output TaskParameter="CopiedFiles" ItemName="NuGetRestorePackagesNupkgFile" />
+    </Copy>
+    <Unzip
+      SourceFiles="@(NuGetRestorePackagesNupkgFile)"
+      DestinationFolder="$(RestorePackagesPath)\$(PackageId)\$(PackageVersion)"
+    />
+    <Delete
+      Files="$(RestorePackagesPath)\$(PackageId)\$(PackageVersion)\[Content_Types].xml"
+      Condition="Exists('$(RestorePackagesPath)\$(PackageId)\$(PackageVersion)\[Content_Types].xml')"
+    />
+    <RemoveDir
+      Directories="$(RestorePackagesPath)\$(PackageId)\$(PackageVersion)\_rels"
+      Condition="Exists('$(RestorePackagesPath)\$(PackageId)\$(PackageVersion)\_rels')"
+    />
+
+    <ItemGroup>
+      <NuGetRestorePackagesNupkgHashFile Include="@(NuGetPackNupkgOutputWithHash->'$(RestorePackagesPath)\$(PackageId)\$(PackageVersion)\%(Filename)%(Extension).sha512')" />
+    </ItemGroup>
+    <WriteLinesToFile
+      File="%(NuGetRestorePackagesNupkgHashFile.FullPath)"
+      Lines="%(NuGetRestorePackagesNupkgHashFile.FileHashSha512)"
+      Overwrite="true"
+      WriteOnlyWhenDifferent="true"
+    />
+
+  </Target>
+
+</Project>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+
+  <!-- Import Directory.Build file from parent directory -->
+  <PropertyGroup>
+    <MSBuildAllProjects>
+      $(MSBuildAllProjects);$(MSBuildThisFileDirectory)..\$(MSBuildThisFileName)$(MSBuildThisFileExtension)</MSBuildAllProjects>
+  </PropertyGroup>
+  <Import Project="$(MSBuildThisFileDirectory)..\$(MSBuildThisFileName)$(MSBuildThisFileExtension)" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+</Project>
