@@ -3,6 +3,7 @@
 
   <Target
     Name="EnsureNuGetPackOutputFallbackFolderInstallPath"
+    BeforeTargets="ResolvePackageAssets"
   >
     <ItemGroup>
       <_RestoreFallbackFolderItem Include="$(RestoreFallbackFolders)">
@@ -113,7 +114,7 @@
   <Target
     Name="RestoreAndBuildAndPackProjectReferenceInPackageReference"
     DependsOnTargets="EnsureNuGetPackOutputFallbackFolderInstallPath"
-    BeforeTargets="_GenerateRestoreGraph"
+    BeforeTargets="_GenerateRestoreProjectPathItems"
   >
     <ItemGroup>
       <PackageReferenceWithProject
