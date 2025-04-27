@@ -20,7 +20,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Nuget">
-    <RestorePackagesPath>$(MSBuildThisFileDirectory)packages\$([MSBuild]::ValueOrDefault('$(Configuration)', 'Debug'))</RestorePackagesPath>
+    <RestoreAdditionalProjectFallbackFolders>$(MSBuildThisFileDirectory)packages</RestoreAdditionalProjectFallbackFolders>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -41,5 +41,7 @@
       <PackagePath></PackagePath>
     </None>
   </ItemGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)build\FredrikHr.NupkgMSBuild.PackPackageReference\build\Package.props" />
 
 </Project>

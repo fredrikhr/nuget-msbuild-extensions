@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+
+  <PropertyGroup>
+    <PackageSignatureOverwite>false</PackageSignatureOverwite>
+    <PackageSignatureHashAlgorithm>SHA256</PackageSignatureHashAlgorithm>
+    <PackageSignatureTimestamperHashAlgorithm>SHA256</PackageSignatureTimestamperHashAlgorithm>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NugetPackageAuthorSigningTaskAssembly
+      Condition="'$(MSBuildRuntimeType)' == 'Core'"
+    >$(MSBuildThisFileDirectory)..\tasks\net8.0\FredrikHr.NupkgMSBuild.PackageAuthorSigning.dll</NugetPackageAuthorSigningTaskAssembly>
+    <NugetPackageAuthorSigningTaskAssembly
+      Condition="'$(MSBuildRuntimeType)' != 'Core'"
+    >$(MSBuildThisFileDirectory)..\tasks\net472\FredrikHr.NupkgMSBuild.PackageAuthorSigning.dll</NugetPackageAuthorSigningTaskAssembly>
+  </PropertyGroup>
+
+  <UsingTask
+    TaskName="FredrikHr.NupkgMSBuild.PackageAuthorSigning.NugetAuthorSigningTask"
+    AssemblyFile="$(NugetPackageAuthorSigningTaskAssembly)"
+  />
+
+</Project>

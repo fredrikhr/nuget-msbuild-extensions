@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+
+  <Target
+    Name="AddPackablePackageReferenceBuildOutputInPackage"
+    DependsOnTargets="ResolveReferences"
+  >
+    <ItemGroup>
+      <PackablePackageReference Include="@(PackageReference->WithMetadataValue('Pack', 'true'))" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackableReferenceCopyLocalPaths Include="@(RuntimeCopyLocalItems)">
+        <PackablePackageReference>%(PackablePackageReference.Identity)</PackablePackageReference>
+      </PackableReferenceCopyLocalPaths>
+      <PackableReferenceCopyLocalPaths
+        Remove="@(PackableReferenceCopyLocalPaths)"
+        Condition="'%(NuGetPackageId)' != '%(PackablePackageReference)'"
+      />
+    </ItemGroup>
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(PackableReferenceCopyLocalPaths)" />
+    </ItemGroup>
+  </Target>
+
+</Project>

@@ -11,4 +11,19 @@
       <Version>1.15.0</Version>
     </PackageVersion>
   </ItemGroup>
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.Build.Framework" Version="17.13.9" />
+    <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="17.13.9" />
+    <PackageVersion Include="NuGet.Common" Version="6.13.2" />
+    <PackageVersion Include="NuGet.Commands" Version="6.13.2" />
+    <PackageVersion Include="NuGet.Packaging" Version="6.13.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageVersion Include="FredrikHr.NupkgMSBuild.PackPackageReference">
+      <Version>1.0.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="FredrikHr.NupkgMSBuild.PackageAuthorSigning">
+      <Version>1.0.0</Version>
+    </PackageVersion>
+  </ItemGroup>
 </Project>

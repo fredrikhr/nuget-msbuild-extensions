@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+
+  <Target
+    Name="EnsureNuGetPackOutputFallbackFolderInstallPath"
+  >
+    <ItemGroup>
+      <_RestoreFallbackFolderItem Include="$(RestoreFallbackFolders)">
+        <SourceProperty>RestoreFallbackFolders</SourceProperty>
+      </_RestoreFallbackFolderItem>
+      <_RestoreAdditionalProjectFallbackFolderItem
+        Include="$(RestoreAdditionalProjectFallbackFolders)"
+        Exclude="$(RestoreAdditionalProjectFallbackFoldersExcludes)"
+      >
+        <SourceProperty>RestoreAdditionalProjectFallbackFolders</SourceProperty>
+      </_RestoreAdditionalProjectFallbackFolderItem>
+    </ItemGroup>
+    <PropertyGroup>
+      <_RestoreFallbackFolderCombined>@(_RestoreFallbackFolderItem-&gt;Distinct())</_RestoreFallbackFolderCombined>
+      <_RestoreFallbackFolderFirst Condition="$(_RestoreFallbackFolderCombined.Contains(';'))">$(_RestoreFallbackFolderCombined.Substring(0, $(_RestoreFallbackFolderCombined.IndexOf(';'))))</_RestoreFallbackFolderFirst>
+      <_RestoreFallbackFolderFirst Condition="!$(_RestoreFallbackFolderCombined.Contains(';'))">$(_RestoreFallbackFolderCombined)</_RestoreFallbackFolderFirst>
+    </PropertyGroup>
+    <PropertyGroup>
+      <_RestoreAdditionalProjectFallbackFolderCombined>@(_RestoreAdditionalProjectFallbackFolderItem-&gt;Distinct())</_RestoreAdditionalProjectFallbackFolderCombined>
+      <_RestoreAdditionalProjectFallbackFolderFirst Condition="$(_RestoreAdditionalProjectFallbackFolderCombined.Contains(';'))">$(_RestoreAdditionalProjectFallbackFolderCombined.Substring(0, $(_RestoreAdditionalProjectFallbackFolderCombined.IndexOf(';'))))</_RestoreAdditionalProjectFallbackFolderFirst>
+      <_RestoreAdditionalProjectFallbackFolderFirst Condition="!$(_RestoreAdditionalProjectFallbackFolderCombined.Contains(';'))">$(_RestoreAdditionalProjectFallbackFolderCombined)</_RestoreAdditionalProjectFallbackFolderFirst>
+    </PropertyGroup>
+    <PropertyGroup>
+      <_InstallNupkgFallbackFolderPath
+        Condition="'$(_RestoreAdditionalProjectFallbackFolderFirst)' != ''"
+      >$(_RestoreAdditionalProjectFallbackFolderFirst)</_InstallNupkgFallbackFolderPath>
+      <_InstallNupkgFallbackFolderPath
+        Condition="'$(_RestoreAdditionalProjectFallbackFolderFirst)' == '' and '$(_RestoreFallbackFolderFirst)' != ''"
+      >$(_RestoreFallbackFolderFirst)</_InstallNupkgFallbackFolderPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(_InstallNupkgFallbackFolderPath)' != ''">
+      <NuGetPackOutputFallbackFolderInstallPath>$(_InstallNupkgFallbackFolderPath)\$(PackageId)\$(PackageVersion)</NuGetPackOutputFallbackFolderInstallPath>
+    </PropertyGroup>
+
+    <MakeDir Directories="$(NuGetPackOutputFallbackFolderInstallPath)" />
+
+  </Target>
+
+  <Target
+    Name="GetInstalledInFallbackFolderPackOutputs"
+    DependsOnTargets="_CalculateInputsOutputsForPack;EnsureNuGetPackOutputFallbackFolderInstallPath"
+    Returns="@(NuGetPackOutputInstalledToFallbackFolder)"
+  >
+    <ItemGroup Condition="'$(NuGetPackOutputFallbackFolderInstallPath)' != ''">
+      <NuGetPackOutputInstalledToFallbackFolder
+        Include="$(NuGetPackOutputFallbackFolderInstallPath)\.nupkg.metadata"
+      />
+    </ItemGroup>
+
+  </Target>
+
+  <Target
+    Name="InstallNupkgToFallbackFolderInstallPath"
+    DependsOnTargets="GetInstalledInFallbackFolderPackOutputs"
+    AfterTargets="Pack"
+    Condition="'$(RestoreFallbackFolders)' != '' OR '$(RestoreAdditionalProjectFallbackFolders)' != ''"
+    Inputs="@(NuGetPackOutput->WithMetadataValue('Extension', '.nupkg'))"
+    Outputs="@(NuGetPackOutputInstalledToFallbackFolder)"
+  >
+    <GetFileHash
+      Files="@(NuGetPackOutput->WithMetadataValue('Extension', '.nupkg'))"
+      Algorithm="SHA512" HashEncoding="base64"
+      MetadataName="FileHash"
+    >
+      <Output TaskParameter="Items" ItemName="NuGetPackOutputWithHash" />
+    </GetFileHash>
+    <ItemGroup>
+      <NuGetPackOutputIntalledToFallbackFolderHashFile
+        Include="@(NuGetPackOutputWithHash->'$(NuGetPackOutputFallbackFolderInstallPath)\%(Filename)%(Extension).sha512')"
+      />
+    </ItemGroup>
+    <RemoveDir
+      Directories="$(NuGetPackOutputFallbackFolderInstallPath)"
+      Condition="Exists('$(NuGetPackOutputFallbackFolderInstallPath)')"
+    />
+    <Unzip
+      SourceFiles="@(NuGetPackOutput->WithMetadataValue('Extension', '.nupkg'))"
+      DestinationFolder="$(NuGetPackOutputFallbackFolderInstallPath)"
+    />
+    <!--
+    <Copy
+      SourceFiles="@(NuGetPackOutput->WithMetadataValue('Extension', '.nupkg'))"
+      DestinationFolder="$(NuGetPackOutputFallbackFolderInstallPath)"
+    />
+    -->
+    <Delete
+      Files="$(NuGetPackOutputFallbackFolderInstallPath)\[Content_Types].xml"
+      Condition="Exists('$(NuGetPackOutputFallbackFolderInstallPath)\[Content_Types].xml')"
+    />
+    <RemoveDir
+      Directories="$(NuGetPackOutputFallbackFolderInstallPath)\_rels"
+      Condition="Exists('$(NuGetPackOutputFallbackFolderInstallPath)\_rels')"
+    />
+    <WriteLinesToFile
+      File="%(NuGetPackOutputIntalledToFallbackFolderHashFile.FullPath)"
+      Lines="%(NuGetPackOutputIntalledToFallbackFolderHashFile.FileHash)"
+      Overwrite="true"
+    />
+    <WriteLinesToFile
+      File="$(NuGetPackOutputFallbackFolderInstallPath)\.nupkg.metadata"
+      Lines="{;  &quot;version&quot;: 2,;  &quot;contentHash&quot;: &quot;%(NuGetPackOutputIntalledToFallbackFolderHashFile.FileHash)&quot;,; &quot;source&quot;: null;}"
+      Overwrite="true"
+    />
+
+  </Target>
+
+  <Target
+    Name="RestoreAndBuildAndPackProjectReferenceInPackageReference"
+    DependsOnTargets="EnsureNuGetPackOutputFallbackFolderInstallPath"
+    BeforeTargets="_GenerateRestoreGraph"
+  >
+    <ItemGroup>
+      <PackageReferenceWithProject
+        Include="@(PackageReference->HasMetadata('ProjectReference'))"
+      />
+      <PackageReferenceReferencedProject
+        Include="@(PackageReferenceWithProject->'%(ProjectReference)')"
+      />
+    </ItemGroup>
+
+    <MSBuild
+      Projects="@(PackageReferenceReferencedProject)"
+      Condition="'@(PackageReferenceReferencedProject)' != ''"
+      Targets="Restore"
+    />
+    <MSBuild
+      Projects="@(PackageReferenceReferencedProject)"
+      Condition="'@(PackageReferenceReferencedProject)' != ''"
+      Targets="Build;Pack"
+    />
+  </Target>
+
+</Project>

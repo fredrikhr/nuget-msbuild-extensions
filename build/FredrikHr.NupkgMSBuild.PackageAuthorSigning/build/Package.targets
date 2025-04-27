@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+
+  <Target
+    Name="SignNupkgPackOutput"
+    AfterTargets="Pack"
+    Inputs="@(NuGetPackOutput->WithMetadataValue('Extension', '.nupkg'))"
+    Outputs="$(BaseIntermediateOutputPath)$(Configuration)\$(PackageId).signing.marker"
+  >
+    <NugetAuthorSigningTask
+      PackagePaths="@(NuGetPackOutput->WithMetadataValue('Extension', '.nupkg'))"
+      CertificateStoreLocation="$(PackageSigningCertificateStoreLocation)"
+      CertificateStoreName="$(PackageSigningCertificateStoreName)"
+      CertificateSubjectName="$(PackageSigningCertificateSubjectName)"
+      CertificateFingerprint="$(PackageSigningCertificateThumbprint)"
+      CertificatePath="$(PackageSigningCertificatePath)"
+      CertificatePassword="$(PackageSigningCertificatePassword)"
+      Timestamper="$(PackageSignatureTimestamper)"
+      TimestampHashAlgorithm="$(PackageSignatureTimestamperHashAlgorithm)"
+      Overwrite="$(PackageSignatureOverwite)"
+      SignatureHashAlgorithm="$(PackageSignatureHashAlgorithm)"
+    />
+    <Touch
+      AlwaysCreate="true"
+      Files="$(BaseIntermediateOutputPath)$(Configuration)\$(PackageId).signing.marker"
+    />
+  </Target>
+
+</Project>

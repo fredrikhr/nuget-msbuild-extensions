@@ -12,15 +12,14 @@
   <Folder Name="/.github/">
     <File Path=".github/dependabot.yml" />
   </Folder>
-  <Folder Name="/src/">
-    <File Path="src/Directory.Build.props" />
-    <File Path="src/Directory.Build.targets" />
+  <Folder Name="/build/">
+    <File Path="build/Directory.Build.targets" />
+    <Project Path="build/FredrikHr.NupkgMSBuild.GitHubPackageProjectUrlInference/FredrikHr.NupkgMSBuild.GitHubPackageProjectUrlInference.csproj" />
+    <Project Path="build/FredrikHr.NupkgMSBuild.PackPackageReference/FredrikHr.NupkgMSBuild.PackPackageReference.csproj" />
+    <Project Path="build/FredrikHr.NupkgMSBuild.PackageAuthorSigning/FredrikHr.NupkgMSBuild.PackageAuthorSigning.csproj" />
+    <Project Path="build/FredrikHr.NupkgMSBuild.ProjectReferenceAsPackageReference/FredrikHr.NupkgMSBuild.ProjectReferenceAsPackageReference.csproj" />
   </Folder>
-  <Folder Name="/src/no-build/">
-    <File Path="src/no-build/Directory.Build.props" />
-    <File Path="src/no-build/Directory.Build.targets" />
-    <Project Path="src/no-build/FredrikHr.NupkgMSBuild.GitHubPackageProjectUrlInference/FredrikHr.NupkgMSBuild.GitHubPackageProjectUrlInference.csproj" />
-    <Project Path="src/no-build/FredrikHr.NupkgMSBuild.PackPackageReference/FredrikHr.NupkgMSBuild.PackPackageReference.csproj" />
+  <Folder Name="/test/">
+    <Project Path="test/FredrikHr.NupkgMSBuild.TestPackageAuthorSigning/FredrikHr.NupkgMSBuild.TestPackageAuthorSigning.csproj" />
   </Folder>
-  <Folder Name="/src/with-build/" />
 </Solution>
