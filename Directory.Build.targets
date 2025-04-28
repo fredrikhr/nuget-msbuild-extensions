@@ -4,5 +4,6 @@
   <Import Project="$(MSBuildThisFileDirectory)build\FredrikHr.NupkgMSBuild.GitHubPackageProjectUrlInference\build\Package.targets" />
   <Import Project="$(MSBuildThisFileDirectory)build\FredrikHr.NupkgMSBuild.PackPackageReference\build\Package.targets" />
   <Import Project="$(MSBuildThisFileDirectory)build\FredrikHr.NupkgMSBuild.ProjectReferenceAsPackageReference\build\Package.targets" />
+  <Import Project="$(MSBuildThisFileDirectory)build\FredrikHr.NupkgMSBuild.StripNuspecTfm\build\Package.targets" />
 
 </Project>

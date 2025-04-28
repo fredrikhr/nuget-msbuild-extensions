@@ -18,6 +18,7 @@
     <Project Path="build/FredrikHr.NupkgMSBuild.PackPackageReference/FredrikHr.NupkgMSBuild.PackPackageReference.csproj" />
     <Project Path="build/FredrikHr.NupkgMSBuild.PackageAuthorSigning/FredrikHr.NupkgMSBuild.PackageAuthorSigning.csproj" />
     <Project Path="build/FredrikHr.NupkgMSBuild.ProjectReferenceAsPackageReference/FredrikHr.NupkgMSBuild.ProjectReferenceAsPackageReference.csproj" />
+    <Project Path="build/FredrikHr.NupkgMSBuild.StripNuspecTfm/FredrikHr.NupkgMSBuild.StripNuspecTfm.csproj" />
   </Folder>
   <Folder Name="/test/">
     <Project Path="test/FredrikHr.NupkgMSBuild.TestPackageAuthorSigning/FredrikHr.NupkgMSBuild.TestPackageAuthorSigning.csproj" />
