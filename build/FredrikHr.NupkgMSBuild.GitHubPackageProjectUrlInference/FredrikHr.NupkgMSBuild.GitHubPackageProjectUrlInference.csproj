@@ -19,15 +19,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub">
-      <PrivateAssets>none</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="build\Package.targets" Pack="true">
       <PackagePath>build\$(PackageId).targets;buildMultiTargeting\$(PackageId).targets</PackagePath>
     </Content>
   </ItemGroup>
+
+  <Target
+    Name="UpdateGitHubSourceLinkPackageReference"
+    BeforeTargets="_GenerateRestoreProjectPathItems"
+  >
+    <ItemGroup>
+      <PackageReference Remove="Microsoft.SourceLink.GitHub" />
+      <PackageReference Include="Microsoft.SourceLink.GitHub">
+        <IncludeAssets>all</IncludeAssets>
+        <PrivateAssets>none</PrivateAssets>
+      </PackageReference>
+    </ItemGroup>
+  </Target>
 
 </Project>
