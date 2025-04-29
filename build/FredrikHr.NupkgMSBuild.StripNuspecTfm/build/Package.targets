@@ -17,6 +17,7 @@
 
   <Target
     Name="StripTfmFromGeneratedNuspec"
+    Condition="'$(GenerateNuspecStripTargetFrameworkAttributes)' == 'true'"
     DependsOnTargets="GenerateNuspec"
     Inputs="@(NuGetPackOutput->WithMetadataValue('Extension', '.nuspec'))"
     Outputs="@(NuGetPackOutput->WithMetadataValue('Extension', '.nupkg'))"
