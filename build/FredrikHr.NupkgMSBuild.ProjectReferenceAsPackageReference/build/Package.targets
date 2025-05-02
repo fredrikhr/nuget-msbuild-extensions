@@ -129,11 +129,13 @@
       Projects="@(PackageReferenceReferencedProject)"
       Condition="'@(PackageReferenceReferencedProject)' != ''"
       Targets="Restore"
+      Properties="Configuration=$(Configuration);Platform=$(Platform)"
     />
     <MSBuild
       Projects="@(PackageReferenceReferencedProject)"
       Condition="'@(PackageReferenceReferencedProject)' != ''"
       Targets="Build;Pack"
+      Properties="Configuration=$(Configuration);Platform=$(Platform);ExcludeRestorePackageImports=false;MSBuildIsRestoring=false"
     />
   </Target>
 
