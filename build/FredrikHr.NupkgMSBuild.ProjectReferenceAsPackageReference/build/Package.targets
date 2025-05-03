@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project>
 
-  <Target
-    Name="EnsureNuGetPackOutputFallbackFolderInstallPath"
+  <Target Name="EnsureNuGetPackOutputFallbackFolderInstallPath"
     BeforeTargets="ResolvePackageAssets"
   >
     <ItemGroup>
@@ -43,8 +42,7 @@
 
   </Target>
 
-  <Target
-    Name="GetInstalledInFallbackFolderPackOutputs"
+  <Target Name="GetInstalledInFallbackFolderPackOutputs"
     DependsOnTargets="_CalculateInputsOutputsForPack;EnsureNuGetPackOutputFallbackFolderInstallPath"
     Returns="@(NuGetPackOutputInstalledToFallbackFolder)"
   >
@@ -56,8 +54,7 @@
 
   </Target>
 
-  <Target
-    Name="InstallNupkgToFallbackFolderInstallPath"
+  <Target Name="InstallNupkgToFallbackFolderInstallPath"
     DependsOnTargets="GetInstalledInFallbackFolderPackOutputs"
     AfterTargets="Pack"
     Condition="'$(RestoreFallbackFolders)' != '' OR '$(RestoreAdditionalProjectFallbackFolders)' != ''"
@@ -111,8 +108,7 @@
 
   </Target>
 
-  <Target
-    Name="RestoreAndBuildAndPackProjectReferenceInPackageReference"
+  <Target Name="RestoreAndBuildAndPackProjectReferenceInPackageReference"
     DependsOnTargets="EnsureNuGetPackOutputFallbackFolderInstallPath"
     BeforeTargets="_GenerateRestoreProjectPathItems"
   >
