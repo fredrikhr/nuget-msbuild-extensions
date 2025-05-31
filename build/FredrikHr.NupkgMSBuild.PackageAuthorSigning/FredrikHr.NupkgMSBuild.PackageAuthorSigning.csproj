@@ -9,7 +9,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <NoWarn>$(NoWarn);NU5100;NU5118;NU5128</NoWarn>
     <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
-    <GenerateDependencyFile>true</GenerateDependencyFile>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,6 +33,10 @@
       <GeneratePathProperty>true</GeneratePathProperty>
     </PackageReference>
     <PackageReference Include="NuGet.Commands" Pack="true">
+      <PrivateAssets>all</PrivateAssets>
+      <GeneratePathProperty>true</GeneratePathProperty>
+    </PackageReference>
+    <PackageReference Include="NuGet.Protocol" Pack="true">
       <PrivateAssets>all</PrivateAssets>
       <GeneratePathProperty>true</GeneratePathProperty>
     </PackageReference>
@@ -66,12 +70,17 @@
       <PackagePath>bundled\NuGet.Packaging</PackagePath>
     </TfmSpecificPackageFile>
   </ItemGroup>
+  <ItemGroup Condition="'$(PkgNuget_Protocol)' != ''">
+    <TfmSpecificPackageFile Include="$(PkgNuget_Protocol)\*.*" Exclude="$(PkgNuget_Protocol)\*.nupkg;$(PkgNuget_Protocol)\*.nupkg.sha512;$(PkgNuget_Protocol)\.nupkg.metadata;$(PkgNuget_Protocol)\.signature.p7s">
+      <PackagePath>bundled\NuGet.Protocol</PackagePath>
+    </TfmSpecificPackageFile>
+  </ItemGroup>
   <ItemGroup>
     <None Include="NOTICE" Pack="true">
       <PackagePath></PackagePath>
     </None>
     <None Include="bundled\NuGet\License.txt" Pack="true">
-      <PackagePath>bundled\NuGet.Common;bundled\NuGet.Commands;bundled\NuGet.Packaging</PackagePath>
+      <PackagePath>bundled\NuGet.Common;bundled\NuGet.Commands;bundled\NuGet.Packaging;bundled\NuGet.Protocol</PackagePath>
     </None>
   </ItemGroup>
 
