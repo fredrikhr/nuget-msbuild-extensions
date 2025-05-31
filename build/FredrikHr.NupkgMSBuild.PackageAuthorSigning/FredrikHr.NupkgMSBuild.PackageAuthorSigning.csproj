@@ -12,6 +12,10 @@
     <GenerateDependencyFile>false</GenerateDependencyFile>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);AddNugetBundleFilesToPackage</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="FredrikHr.NupkgMSBuild.PackPackageReference">
       <PrivateAssets>all</PrivateAssets>
@@ -31,18 +35,32 @@
     <PackageReference Include="NuGet.Common" Pack="true">
       <PrivateAssets>all</PrivateAssets>
       <GeneratePathProperty>true</GeneratePathProperty>
+      <RestorePackagePath>$(PkgNuget_Common)</RestorePackagePath>
     </PackageReference>
     <PackageReference Include="NuGet.Commands" Pack="true">
       <PrivateAssets>all</PrivateAssets>
       <GeneratePathProperty>true</GeneratePathProperty>
+      <RestorePackagePath>$(PkgNuget_Commands)</RestorePackagePath>
     </PackageReference>
-    <PackageReference Include="NuGet.Protocol" Pack="true">
+    <PackageReference Include="NuGet.Configuration" Pack="true">
       <PrivateAssets>all</PrivateAssets>
       <GeneratePathProperty>true</GeneratePathProperty>
+      <RestorePackagePath>$(PkgNuget_Configuration)</RestorePackagePath>
+    </PackageReference>
+    <PackageReference Include="NuGet.Frameworks" Pack="true">
+      <PrivateAssets>all</PrivateAssets>
+      <GeneratePathProperty>true</GeneratePathProperty>
+      <RestorePackagePath>$(PkgNuget_Frameworks)</RestorePackagePath>
     </PackageReference>
     <PackageReference Include="NuGet.Packaging" Pack="true">
       <PrivateAssets>all</PrivateAssets>
       <GeneratePathProperty>true</GeneratePathProperty>
+      <RestorePackagePath>$(PkgNuget_Packaging)</RestorePackagePath>
+    </PackageReference>
+    <PackageReference Include="NuGet.Protocol" Pack="true">
+      <PrivateAssets>all</PrivateAssets>
+      <GeneratePathProperty>true</GeneratePathProperty>
+      <RestorePackagePath>$(PkgNuget_Protocol)</RestorePackagePath>
     </PackageReference>
   </ItemGroup>
 
@@ -55,26 +73,6 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(PkgNuget_Common)' != ''">
-    <TfmSpecificPackageFile Include="$(PkgNuget_Common)\*.*" Exclude="$(PkgNuget_Common)\*.nupkg;$(PkgNuget_Common)\*.nupkg.sha512;$(PkgNuget_Common)\.nupkg.metadata;$(PkgNuget_Common)\.signature.p7s">
-      <PackagePath>bundled\NuGet.Common</PackagePath>
-    </TfmSpecificPackageFile>
-  </ItemGroup>
-  <ItemGroup Condition="'$(PkgNuget_Commands)' != ''">
-    <TfmSpecificPackageFile Include="$(PkgNuget_Commands)\*.*" Exclude="$(PkgNuget_Commands)\*.nupkg;$(PkgNuget_Commands)\*.nupkg.sha512;$(PkgNuget_Commands)\.nupkg.metadata;$(PkgNuget_Commands)\.signature.p7s">
-      <PackagePath>bundled\NuGet.Commands</PackagePath>
-    </TfmSpecificPackageFile>
-  </ItemGroup>
-  <ItemGroup Condition="'$(PkgNuget_Packaging)' != ''">
-    <TfmSpecificPackageFile Include="$(PkgNuget_Packaging)\*.*" Exclude="$(PkgNuget_Packaging)\*.nupkg;$(PkgNuget_Packaging)\*.nupkg.sha512;$(PkgNuget_Packaging)\.nupkg.metadata;$(PkgNuget_Packaging)\.signature.p7s">
-      <PackagePath>bundled\NuGet.Packaging</PackagePath>
-    </TfmSpecificPackageFile>
-  </ItemGroup>
-  <ItemGroup Condition="'$(PkgNuget_Protocol)' != ''">
-    <TfmSpecificPackageFile Include="$(PkgNuget_Protocol)\*.*" Exclude="$(PkgNuget_Protocol)\*.nupkg;$(PkgNuget_Protocol)\*.nupkg.sha512;$(PkgNuget_Protocol)\.nupkg.metadata;$(PkgNuget_Protocol)\.signature.p7s">
-      <PackagePath>bundled\NuGet.Protocol</PackagePath>
-    </TfmSpecificPackageFile>
-  </ItemGroup>
   <ItemGroup>
     <None Include="NOTICE" Pack="true">
       <PackagePath></PackagePath>
@@ -83,5 +81,27 @@
       <PackagePath>bundled\NuGet.Common;bundled\NuGet.Commands;bundled\NuGet.Packaging;bundled\NuGet.Protocol</PackagePath>
     </None>
   </ItemGroup>
+
+  <Target Name="AddNugetBundleFilesToPackage">
+    <ItemGroup>
+      <NugetPackagePackageReference
+        Include="@(PackageReference->WithMetadataValue('Pack', 'true'))"
+        Condition="$([System.String]::Copy('%(PackageReference.Identity)').StartsWith('NuGet')) AND '%(PackageReference.RestorePackagePath)' != ''"
+      />
+    </ItemGroup>
+    <CreateItem
+      Include="@(NugetPackagePackageReference->'%(RestorePackagePath)\*.*'->ClearMetadata())"
+      AdditionalMetadata="PackagePath=bundled\%(NugetPackagePackageReference.Identity)"
+      Exclude="%(NugetPackagePackageReference.RestorePackagePath)\*.nupkg;%(NugetPackagePackageReference.RestorePackagePath)\*.nupkg.sha512;%(NugetPackagePackageReference.RestorePackagePath)\*.nupkg.metadata;%(NugetPackagePackageReference.RestorePackagePath)\*.signature.p7s"
+      PreserveExistingMetadata="false"
+    >
+      <Output TaskParameter="Include" ItemName="TfmSpecificPackageFile" />
+    </CreateItem>
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="bundled\NuGet\License.txt">
+        <PackagePath>@(NugetPackagePackageReference-&gt;'bundled\%(Identity)')</PackagePath>
+      </TfmSpecificPackageFile>
+    </ItemGroup>
+  </Target>
 
 </Project>
