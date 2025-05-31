@@ -1,5 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Project Sdk="Microsoft.Build.NoTargets">
+<Project>
+
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -8,7 +14,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <DevelopmentDependency>true</DevelopmentDependency>
     <IsPackable>true</IsPackable>
-    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <NoWarn>$(NoWarn);CS2008;CA1016;NU5128</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -16,6 +22,16 @@
       Adds a new custom target into the MSBuild pipeline that sets the NuGet package Project URL to the GitHub repository URL.
       The GitHub repository URL is determined by stripping the trailing '.git' from the Repository Git clone URL.
     </Description>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <AutoGenerateAssemblyVersion>false</AutoGenerateAssemblyVersion>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
   <ItemGroup>
@@ -36,5 +52,13 @@
       </PackageReference>
     </ItemGroup>
   </Target>
+
+  <Target Name="GetTargetPath" />
+
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+  <PropertyGroup>
+    <Language>Nupkg</Language>
+  </PropertyGroup>
 
 </Project>
