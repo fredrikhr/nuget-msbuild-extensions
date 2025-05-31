@@ -105,6 +105,9 @@
       Lines="{;  &quot;version&quot;: 2,;  &quot;contentHash&quot;: &quot;%(NuGetPackOutputIntalledToFallbackFolderHashFile.FileHash)&quot;,; &quot;source&quot;: null;}"
       Overwrite="true"
     />
+    <ItemGroup>
+      <FileWrites Include="$(NuGetPackOutputFallbackFolderInstallPath)\**\*" />
+    </ItemGroup>
 
   </Target>
 
