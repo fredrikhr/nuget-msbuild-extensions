@@ -4,7 +4,7 @@ using NuGet.Common;
 
 namespace FredrikHr.NupkgMSBuild.PackageAuthorSigning;
 
-internal sealed class MSBuilNuGetLoggingAdapter(TaskLoggingHelper logger)
+internal sealed class MSBuildNuGetLoggingAdapter(TaskLoggingHelper logger)
     : LoggerBase()
 {
     public override void Log(ILogMessage message)

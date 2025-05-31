@@ -65,7 +65,7 @@ public class NugetAuthorSigningTask : MSBuildTask
                 ? NuGet.Common.HashAlgorithmName.SHA256
                 : ParseEnum<NuGet.Common.HashAlgorithmName>(TimestampHashAlgorithm!),
 
-            Logger = new MSBuilNuGetLoggingAdapter(Log),
+            Logger = new MSBuildNuGetLoggingAdapter(Log),
             NonInteractive = true,
         };
         SignCommandRunner runner = new();
