@@ -1,41 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project>
 
-  <Target
-    Name="AddPackablePackageReferenceBuildOutputInPackage"
-    DependsOnTargets="ResolveReferences"
-  >
+  <Target Name="GetPackablePackageReferences">
     <ItemGroup>
       <PackablePackageReference Include="@(PackageReference->WithMetadataValue('Pack', 'true'))" />
     </ItemGroup>
+  </Target>
+
+  <Target
+    Name="BuiltProjectOutputGroupDependenciesTfmSpecificBuildOutput"
+    DependsOnTargets="GetPackablePackageReferences;BuiltProjectOutputGroupDependencies;SatelliteDllsProjectOutputGroupDependencies;DocumentationProjectOutputGroupDependencies;SGenFilesOutputGroupDependencies"
+  >
     <ItemGroup>
-      <PackableReferenceCopyLocalPaths Include="@(RuntimeCopyLocalItems)">
+      <TfmSpecificBuildOutputProjectOutputGroupDependency
+        Include="@(BuiltProjectOutputGroupDependency->WithMetadataValue('ReferenceSourceTarget', 'ResolveAssemblyReference')->HasMetadata('NuGetPackageId'))"
+        Exclude="@(BuiltProjectOutputGroupDependency->WithMetadataValue('Pack', 'false'))"
+      >
         <PackablePackageReference>%(PackablePackageReference.Identity)</PackablePackageReference>
-      </PackableReferenceCopyLocalPaths>
-      <PackableReferenceCopyLocalPaths
-        Remove="@(PackableReferenceCopyLocalPaths)"
+      </TfmSpecificBuildOutputProjectOutputGroupDependency>
+      <TfmSpecificBuildOutputProjectOutputGroupDependency
+        Include="@(SatelliteDllsProjectOutputGroupDependency->WithMetadataValue('ReferenceSourceTarget', 'ResolveAssemblyReference')->HasMetadata('NuGetPackageId'))"
+        Exclude="@(SatelliteDllsProjectOutputGroupDependency->WithMetadataValue('Pack', 'false'))"
+      >
+        <PackablePackageReference>%(PackablePackageReference.Identity)</PackablePackageReference>
+      </TfmSpecificBuildOutputProjectOutputGroupDependency>
+      <TfmSpecificBuildOutputProjectOutputGroupDependency
+        Include="@(DocumentationProjectOutputGroupDependency->WithMetadataValue('ReferenceSourceTarget', 'ResolveAssemblyReference')->HasMetadata('NuGetPackageId'))"
+        Exclude="@(DocumentationProjectOutputGroupDependency->WithMetadataValue('Pack', 'false'))"
+      >
+        <PackablePackageReference>%(PackablePackageReference.Identity)</PackablePackageReference>
+      </TfmSpecificBuildOutputProjectOutputGroupDependency>
+      <TfmSpecificBuildOutputProjectOutputGroupDependency
+        Include="@(SGenFilesOutputGroupDependency->WithMetadataValue('ReferenceSourceTarget', 'ResolveAssemblyReference')->HasMetadata('NuGetPackageId'))"
+        Exclude="@(SGenFilesOutputGroupDependency->WithMetadataValue('Pack', 'false'))"
+      >
+        <PackablePackageReference>%(PackablePackageReference.Identity)</PackablePackageReference>
+      </TfmSpecificBuildOutputProjectOutputGroupDependency>
+      <TfmSpecificBuildOutputProjectOutputGroupDependency
+        Remove="@(TfmSpecificBuildOutputProjectOutputGroupDependency)"
         Condition="'%(NuGetPackageId)' != '%(PackablePackageReference)'"
       />
-    </ItemGroup>
-    <ItemGroup>
-      <BuildOutputInPackage Include="@(PackableReferenceCopyLocalPaths)">
-        <TargetPath>%(DestinationSubPath)</TargetPath>
-      </BuildOutputInPackage>
+      <BuildOutputInPackage Include="@(TfmSpecificBuildOutputProjectOutputGroupDependency)" />
     </ItemGroup>
   </Target>
 
-  <!-- This target adds the generated deps.json file to our package output -->
   <Target
-    Name="AddBuildDependencyFileToBuiltProjectOutputGroupOutput"
-    BeforeTargets="BuiltProjectOutputGroup"
-    Condition=" '$(GenerateDependencyFile)' == 'true'"
+    Name="DebugSymbolsProjectOutputGroupDependenciesTfmSpecificDebugSymbolsInPackage"
+    DependsOnTargets="GetPackablePackageReferences;DebugSymbolsProjectOutputGroupDependencies"
   >
     <ItemGroup>
-      <BuiltProjectOutputGroupOutput
-        Include="$(ProjectDepsFilePath)"
-        TargetPath="$(ProjectDepsFileName)"
-        FinalOutputPath="$(ProjectDepsFilePath)"
-      />
+      <DebugSymbolsInPackageProjectOutputGroupDependency
+        Include="@(DebugSymbolsProjectOutputGroupDependency->WithMetadataValue('ReferenceSourceTarget', 'ResolveAssemblyReference')->HasMetadata('NuGetPackageId'))"
+        Exclude="@(DebugSymbolsProjectOutputGroupDependency->WithMetadataValue('Pack', 'false'))"
+      >
+        <PackablePackageReference>%(PackablePackageReference.Identity)</PackablePackageReference>
+      </DebugSymbolsInPackageProjectOutputGroupDependency>
+      <TfmSpecificDebugSymbolsFile Include="@(DebugSymbolsInPackageProjectOutputGroupDependency)" />
     </ItemGroup>
   </Target>
 
