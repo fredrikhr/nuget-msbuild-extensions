@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project>
   <PropertyGroup>
-    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);BuiltProjectOutputGroupDependenciesTfmSpecificBuildOutput</TargetsForTfmSpecificBuildOutput>
-    <TargetsForTfmSpecificDebugSymbolsInPackage>$(TargetsForTfmSpecificDebugSymbolsInPackage);DebugSymbolsProjectOutputGroupDependenciesTfmSpecificDebugSymbolsInPackage</TargetsForTfmSpecificDebugSymbolsInPackage>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);GetPackablePackageReferenceTfmSpecificBuildOutput</TargetsForTfmSpecificBuildOutput>
+    <TargetsForTfmSpecificDebugSymbolsInPackage>$(TargetsForTfmSpecificDebugSymbolsInPackage);GetPackablePackageReferenceTfmSpecificDebugSymbolsInPackage</TargetsForTfmSpecificDebugSymbolsInPackage>
   </PropertyGroup>
 </Project>
