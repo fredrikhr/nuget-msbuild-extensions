@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+
+  <Target Name="GetPackableProjectReferences">
+    <ItemGroup>
+      <PackableProjectReference Include="@(ProjectReference->WithMetadataValue('Pack', 'true'))" />
+    </ItemGroup>
+  </Target>
+
+  <Target
+    Name="GetProjectReferenceTfmSpecificBuildOutput"
+    DependsOnTargets="GetPackableProjectReferences;BuiltProjectOutputGroupDependencies;SatelliteDllsProjectOutputGroupDependencies;DocumentationProjectOutputGroupDependencies;SGenFilesOutputGroupDependencies"
+  >
+    <ItemGroup>
+      <PackableProjectReferenceTfmSpecificBuildOutput
+        Include="@(BuiltProjectOutputGroupDependency->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference')->HasMetadata('MSBuildSourceProjectFile'))"
+        Exclude="@(BuiltProjectOutputGroupDependency->WithMetadataValue('CopyLocal', 'false'))"
+      >
+        <PackableProjectReference>%(PackableProjectReference.FullPath)</PackableProjectReference>
+      </PackableProjectReferenceTfmSpecificBuildOutput>
+      <PackableProjectReferenceTfmSpecificBuildOutput
+        Include="@(SatelliteDllsProjectOutputGroupDependency->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference')->HasMetadata('MSBuildSourceProjectFile'))"
+        Exclude="@(SatelliteDllsProjectOutputGroupDependency->WithMetadataValue('CopyLocal', 'false'))"
+      >
+        <PackableProjectReference>%(PackableProjectReference.FullPath)</PackableProjectReference>
+      </PackableProjectReferenceTfmSpecificBuildOutput>
+      <PackableProjectReferenceTfmSpecificBuildOutput
+        Include="@(DocumentationProjectOutputGroupDependency->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference')->HasMetadata('MSBuildSourceProjectFile'))"
+        Exclude="@(DocumentationProjectOutputGroupDependency->WithMetadataValue('CopyLocal', 'false'))"
+      >
+        <PackableProjectReference>%(PackableProjectReference.FullPath)</PackableProjectReference>
+      </PackableProjectReferenceTfmSpecificBuildOutput>
+      <PackableProjectReferenceTfmSpecificBuildOutput
+        Include="@(SGenFilesOutputGroupDependency->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference')->HasMetadata('MSBuildSourceProjectFile'))"
+        Exclude="@(SGenFilesOutputGroupDependency->WithMetadataValue('CopyLocal', 'false'))"
+      >
+        <PackableProjectReference>%(PackableProjectReference.FullPath)</PackableProjectReference>
+      </PackableProjectReferenceTfmSpecificBuildOutput>
+      <PackableProjectReferenceTfmSpecificBuildOutput
+        Remove="@(PackableProjectReferenceTfmSpecificBuildOutput)"
+        Condition="'%(MSBuildSourceProjectFile)' != '%(PackableProjectReference)'"
+      />
+      <BuildOutputInPackage Include="@(PackableProjectReferenceTfmSpecificBuildOutput)" />
+    </ItemGroup>
+  </Target>
+
+  <Target
+    Name="GetProjectReferenceTfmSpecificDebugSymbolsInPackage"
+    DependsOnTargets="GetPackableProjectReferences;DebugSymbolsProjectOutputGroupDependencies"
+  >
+    <ItemGroup>
+      <PackableProjectReferenceTfmSpecificDebugSymbolsInPackage
+        Include="@(DebugSymbolsProjectOutputGroupDependency->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference')->HasMetadata('MSBuildSourceProjectFile'))"
+        Exclude="@(DebugSymbolsProjectOutputGroupDependency->WithMetadataValue('CopyLocal', 'false'))"
+      >
+        <PackableProjectReference>%(PackableProjectReference.FullPath)</PackableProjectReference>
+      </PackableProjectReferenceTfmSpecificDebugSymbolsInPackage>
+      <PackableProjectReferenceTfmSpecificDebugSymbolsInPackage
+        Remove="@(PackableProjectReferenceTfmSpecificDebugSymbolsInPackage)"
+        Condition="'%(MSBuildSourceProjectFile)' != '%(PackableProjectReference)'"
+      />
+      <TfmSpecificDebugSymbolsFile Include="@(PackableProjectReferenceTfmSpecificDebugSymbolsInPackage)">
+        <TargetFramework>$(TargetFramework)</TargetFramework>
+      </TfmSpecificDebugSymbolsFile>
+    </ItemGroup>
+  </Target>
+
+  <Target
+    Name="RemovePackableProjectReferencesFromNuspecProjectReferences"
+    DependsOnTargets="GetPackableProjectReferences;_GetProjectReferenceVersions"
+    BeforeTargets="GenerateNuspec"
+  >
+    <ItemGroup>
+      <_ProjectReferencesWithVersions Remove="@(PackableProjectReference->'%(FullPath)')" />
+    </ItemGroup>
+  </Target>
+
+</Project>

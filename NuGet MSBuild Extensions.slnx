@@ -16,6 +16,7 @@
     <Project Path="build/FredrikHr.NupkgMSBuild.GitHubPackageProjectUrlInference/FredrikHr.NupkgMSBuild.GitHubPackageProjectUrlInference.csproj" />
     <Project Path="build/FredrikHr.NupkgMSBuild.PackPackageReference/FredrikHr.NupkgMSBuild.PackPackageReference.csproj" />
     <Project Path="build/FredrikHr.NupkgMSBuild.PackageAuthorSigning/FredrikHr.NupkgMSBuild.PackageAuthorSigning.csproj" />
+    <Project Path="build/FredrikHr.NupkgMSBuild.PackProjectReference/FredrikHr.NupkgMSBuild.PackProjectReference.csproj" />
     <Project Path="build/FredrikHr.NupkgMSBuild.ProjectReferenceAsPackageReference/FredrikHr.NupkgMSBuild.ProjectReferenceAsPackageReference.csproj" />
     <Project Path="build/FredrikHr.NupkgMSBuild.StripNuspecTfm/FredrikHr.NupkgMSBuild.StripNuspecTfm.csproj" />
   </Folder>
