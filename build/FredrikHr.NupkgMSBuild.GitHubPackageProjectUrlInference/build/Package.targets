@@ -7,7 +7,12 @@
     DependsOnTargets="_InitializeNuspecRepositoryInformationProperties"
   >
     <PropertyGroup>
-      <PackageProjectUrl>$(RepositoryUrl.Substring(0, $(RepositoryUrl.LastIndexOf('.git'))))</PackageProjectUrl>
+      <PackageProjectUrl
+        Condition="$(RepositoryUrl.Contains('.git'))"
+      >$(RepositoryUrl.Substring(0, $(RepositoryUrl.LastIndexOf('.git'))))</PackageProjectUrl>
+      <PackageProjectUrl
+        Condition="'$(PackageProjectUrl)' == ''"
+      >$(RepositoryUrl)</PackageProjectUrl>
     </PropertyGroup>
   </Target>
 
