@@ -12,8 +12,14 @@
     </GlobalPackageReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="Microsoft.Build.Framework" Version="17.14.28" />
-    <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="17.14.28" />
+    <PackageVersion Include="Microsoft.Build.Framework">
+      <Version Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net10.0'))">17.14.28</Version>
+      <Version Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net10.0'))">18.0.2</Version>
+    </PackageVersion>
+    <PackageVersion Include="Microsoft.Build.Utilities.Core">
+      <Version Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net10.0'))">17.14.28</Version>
+      <Version Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net10.0'))">18.0.2</Version>
+    </PackageVersion>
     <PackageVersion Include="NuGet.Commands" Version="6.14.0" />
     <PackageVersion Include="NuGet.Common" Version="6.14.0" />
     <PackageVersion Include="NuGet.Configuration" Version="6.14.0" />
@@ -26,7 +32,7 @@
       <Version>1.1.1</Version>
     </PackageVersion>
     <PackageVersion Include="FredrikHr.NupkgMSBuild.PackageAuthorSigning">
-      <Version>1.0.1</Version>
+      <Version>1.1.0</Version>
     </PackageVersion>
   </ItemGroup>
 </Project>
