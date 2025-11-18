@@ -14,7 +14,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <NoWarn>$(NoWarn);NU5100;NU5118;NU5128</NoWarn>
     <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
-    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <GenerateDependencyFile>true</GenerateDependencyFile>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -106,6 +106,21 @@
       <TfmSpecificPackageFile Include="bundled\NuGet\License.txt">
         <PackagePath>@(NugetPackagePackageReference-&gt;'bundled\%(Identity)')</PackagePath>
       </TfmSpecificPackageFile>
+    </ItemGroup>
+  </Target>
+
+  <!-- This target adds the generated deps.json file to our package output -->
+  <Target
+    Name="AddBuildDependencyFileToBuiltProjectOutputGroupOutput"
+    BeforeTargets="BuiltProjectOutputGroup"
+    Condition=" '$(GenerateDependencyFile)' == 'true'"
+  >
+    <ItemGroup>
+      <BuiltProjectOutputGroupOutput
+        Include="$(ProjectDepsFilePath)"
+        TargetPath="$(ProjectDepsFileName)"
+        FinalOutputPath="$(ProjectDepsFilePath)"
+      />
     </ItemGroup>
   </Target>
 
