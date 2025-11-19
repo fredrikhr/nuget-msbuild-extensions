@@ -135,6 +135,7 @@
       Condition="'@(PackageReferenceReferencedProject)' != ''"
       Targets="Build;Pack"
       Properties="Configuration=Release;ExcludeRestorePackageImports=false;MSBuildIsRestoring=false"
+      RemoveProperties="EnableDefaultCompileItems;EnableDefaultEmbeddedResourceItems;EnableDefaultNoneItems"
     />
   </Target>
 
