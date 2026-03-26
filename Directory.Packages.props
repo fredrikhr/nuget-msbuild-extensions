@@ -5,21 +5,21 @@
   </PropertyGroup>
   <ItemGroup>
     <GlobalPackageReference Include="Microsoft.SourceLink.GitHub">
-      <Version>8.0.0</Version>
+      <Version>10.0.201</Version>
     </GlobalPackageReference>
     <GlobalPackageReference Include="PolySharp">
       <Version>1.15.0</Version>
     </GlobalPackageReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="Microsoft.Build.Framework" Version="17.14.28" />
-    <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="17.14.28" />
-    <PackageVersion Include="NuGet.Commands" Version="6.14.0" />
-    <PackageVersion Include="NuGet.Common" Version="6.14.0" />
-    <PackageVersion Include="NuGet.Configuration" Version="6.14.0" />
-    <PackageVersion Include="NuGet.Frameworks" Version="6.14.0" />
-    <PackageVersion Include="NuGet.Packaging" Version="6.14.0" />
-    <PackageVersion Include="NuGet.Protocol" Version="6.14.0" />
+    <PackageVersion
+      Include="Microsoft.Build.Framework;Microsoft.Build.Utilities.Core"
+      Version="18.4.0"
+    />
+    <PackageVersion
+      Include="NuGet.Common;NuGet.Commands;NuGet.Configuration;NuGet.Frameworks;NuGet.Packaging;NuGet.Protocol"
+      Version="7.3.0"
+    />
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="FredrikHr.NupkgMSBuild.PackPackageReference">
