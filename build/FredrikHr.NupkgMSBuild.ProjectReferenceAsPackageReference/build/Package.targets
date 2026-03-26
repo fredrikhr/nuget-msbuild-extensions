@@ -113,7 +113,7 @@
 
   <Target Name="RestoreAndBuildAndPackProjectReferenceInPackageReference"
     DependsOnTargets="EnsureNuGetPackOutputFallbackFolderInstallPath"
-    BeforeTargets="_GenerateRestoreProjectPathItems"
+    BeforeTargets="CollectPackageReferences"
   >
     <ItemGroup>
       <PackageReferenceWithProject
@@ -129,13 +129,14 @@
       Condition="'@(PackageReferenceReferencedProject)' != ''"
       Targets="Restore"
       Properties="Configuration=Release"
+      RemoveProperties="TargetFramework"
     />
     <MSBuild
       Projects="@(PackageReferenceReferencedProject)"
       Condition="'@(PackageReferenceReferencedProject)' != ''"
       Targets="Build;Pack"
       Properties="Configuration=Release;ExcludeRestorePackageImports=false;MSBuildIsRestoring=false"
-      RemoveProperties="EnableDefaultCompileItems;EnableDefaultEmbeddedResourceItems;EnableDefaultNoneItems"
+      RemoveProperties="TargetFramework;EnableDefaultCompileItems;EnableDefaultEmbeddedResourceItems;EnableDefaultNoneItems"
     />
   </Target>
 
