@@ -25,7 +25,15 @@
       <_RestoreAdditionalProjectFallbackFolderFirst Condition="$(_RestoreAdditionalProjectFallbackFolderCombined.Contains(';'))">$(_RestoreAdditionalProjectFallbackFolderCombined.Substring(0, $(_RestoreAdditionalProjectFallbackFolderCombined.IndexOf(';'))))</_RestoreAdditionalProjectFallbackFolderFirst>
       <_RestoreAdditionalProjectFallbackFolderFirst Condition="!$(_RestoreAdditionalProjectFallbackFolderCombined.Contains(';'))">$(_RestoreAdditionalProjectFallbackFolderCombined)</_RestoreAdditionalProjectFallbackFolderFirst>
     </PropertyGroup>
-    <PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' != 'Release'">
+      <_InstallNupkgFallbackFolderPath
+        Condition="'$(PackageOutputPath)' != ''"
+      >$([MSBuild]::EnsureTrailingSlash('$(PackageOutputPath)')).nupkg</_InstallNupkgFallbackFolderPath>
+      <_InstallNupkgFallbackFolderPath
+        Condition="'$(PackageOutputPath)' == ''"
+      >$([MSBuild]::EnsureTrailingSlash('$(OutputPath)')).nupkg</_InstallNupkgFallbackFolderPath>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
       <_InstallNupkgFallbackFolderPath
         Condition="'$(_RestoreAdditionalProjectFallbackFolderFirst)' != ''"
       >$(_RestoreAdditionalProjectFallbackFolderFirst)</_InstallNupkgFallbackFolderPath>
@@ -128,14 +136,14 @@
       Projects="@(PackageReferenceReferencedProject)"
       Condition="'@(PackageReferenceReferencedProject)' != ''"
       Targets="Restore"
-      Properties="Configuration=Release"
+      Properties="Configuration=Release;RestoreFallbackFolders=$(RestoreFallbackFolders);RestoreAdditionalProjectFallbackFolders=$(RestoreAdditionalProjectFallbackFolders)"
       RemoveProperties="TargetFramework"
     />
     <MSBuild
       Projects="@(PackageReferenceReferencedProject)"
       Condition="'@(PackageReferenceReferencedProject)' != ''"
       Targets="Build;Pack"
-      Properties="Configuration=Release;ExcludeRestorePackageImports=false;MSBuildIsRestoring=false"
+      Properties="Configuration=Release;ExcludeRestorePackageImports=false;MSBuildIsRestoring=false;RestoreFallbackFolders=$(RestoreFallbackFolders);RestoreAdditionalProjectFallbackFolders=$(RestoreAdditionalProjectFallbackFolders)"
       RemoveProperties="TargetFramework;EnableDefaultCompileItems;EnableDefaultEmbeddedResourceItems;EnableDefaultNoneItems"
     />
   </Target>
