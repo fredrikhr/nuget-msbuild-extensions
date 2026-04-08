@@ -46,7 +46,9 @@
       <NuGetPackOutputFallbackFolderInstallPath>$(_InstallNupkgFallbackFolderPath)\$(PackageId)\$(PackageVersion)</NuGetPackOutputFallbackFolderInstallPath>
     </PropertyGroup>
 
+    <!--
     <MakeDir Directories="$(NuGetPackOutputFallbackFolderInstallPath)" />
+    -->
 
   </Target>
 
