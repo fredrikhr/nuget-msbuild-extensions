@@ -42,7 +42,10 @@
       >$(_RestoreFallbackFolderFirst)</_InstallNupkgFallbackFolderPath>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(_InstallNupkgFallbackFolderPath)' != ''">
+    <PropertyGroup Condition="'$(_InstallNupkgFallbackFolderPath)' != '' and '$(Configuration)' != 'Release'">
+      <NuGetPackOutputFallbackFolderInstallPath>$(_InstallNupkgFallbackFolderPath)</NuGetPackOutputFallbackFolderInstallPath>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(_InstallNupkgFallbackFolderPath)' != '' and '$(Configuration)' == 'Release'">
       <NuGetPackOutputFallbackFolderInstallPath>$(_InstallNupkgFallbackFolderPath)\$(PackageId)\$(PackageVersion)</NuGetPackOutputFallbackFolderInstallPath>
     </PropertyGroup>
 
