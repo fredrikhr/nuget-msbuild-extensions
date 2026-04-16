@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <GlobalPackageReference Include="Microsoft.SourceLink.GitHub">
-      <Version>10.0.201</Version>
+      <Version>10.0.202</Version>
     </GlobalPackageReference>
     <GlobalPackageReference Include="PolySharp">
       <Version>1.15.0</Version>
@@ -17,8 +17,15 @@
       Version="18.4.0"
     />
     <PackageVersion
-      Include="NuGet.Common;NuGet.Commands;NuGet.Configuration;NuGet.Frameworks;NuGet.Packaging;NuGet.Protocol"
-      Version="7.3.0"
+      Include="
+        NuGet.Common;
+        NuGet.Commands;
+        NuGet.Configuration;
+        NuGet.Frameworks;
+        NuGet.Packaging;
+        NuGet.Protocol
+        "
+      Version="7.3.1"
     />
   </ItemGroup>
   <ItemGroup>
@@ -26,7 +33,7 @@
       <Version>1.1.1</Version>
     </PackageVersion>
     <PackageVersion Include="FredrikHr.NupkgMSBuild.PackageAuthorSigning">
-      <Version>1.1.0</Version>
+      <Version>1.1.1</Version>
     </PackageVersion>
   </ItemGroup>
 </Project>
