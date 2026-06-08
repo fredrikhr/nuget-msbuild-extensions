@@ -124,33 +124,4 @@
 
   </Target>
 
-  <Target Name="RestoreAndBuildAndPackProjectReferenceInPackageReference"
-    DependsOnTargets="EnsureNuGetPackOutputFallbackFolderInstallPath"
-    BeforeTargets="CollectPackageReferences"
-  >
-    <ItemGroup>
-      <PackageReferenceWithProject
-        Include="@(PackageReference->HasMetadata('ProjectReference'))"
-      />
-      <PackageReferenceReferencedProject
-        Include="@(PackageReferenceWithProject->'%(ProjectReference)')"
-      />
-    </ItemGroup>
-
-    <MSBuild
-      Projects="@(PackageReferenceReferencedProject)"
-      Condition="'@(PackageReferenceReferencedProject)' != ''"
-      Targets="Restore"
-      Properties="Configuration=Release;RestoreFallbackFolders=$(RestoreFallbackFolders);RestoreAdditionalProjectFallbackFolders=$(RestoreAdditionalProjectFallbackFolders)"
-      RemoveProperties="TargetFramework"
-    />
-    <MSBuild
-      Projects="@(PackageReferenceReferencedProject)"
-      Condition="'@(PackageReferenceReferencedProject)' != ''"
-      Targets="Build;Pack"
-      Properties="Configuration=Release;ExcludeRestorePackageImports=false;MSBuildIsRestoring=false;RestoreFallbackFolders=$(RestoreFallbackFolders);RestoreAdditionalProjectFallbackFolders=$(RestoreAdditionalProjectFallbackFolders)"
-      RemoveProperties="TargetFramework;EnableDefaultCompileItems;EnableDefaultEmbeddedResourceItems;EnableDefaultNoneItems"
-    />
-  </Target>
-
 </Project>
