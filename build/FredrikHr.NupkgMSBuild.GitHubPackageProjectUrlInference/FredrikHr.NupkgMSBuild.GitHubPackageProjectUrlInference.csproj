@@ -36,7 +36,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="build\Package.targets" Pack="true">
+    <Content Include="Package.targets" Pack="true">
       <PackagePath>build\$(PackageId).targets;buildMultiTargeting\$(PackageId).targets</PackagePath>
     </Content>
   </ItemGroup>

@@ -14,9 +14,9 @@ internal sealed class MSBuildNuGetLoggingAdapter(TaskLoggingHelper logger)
             case LogLevel.Error:
                 logger.LogError(
                     message: message.Message,
-                    subcategory: message.GetType().Name,
                     errorCode: message.Code.ToString(),
                     file: message.ProjectPath,
+                    subcategory: default,
                     helpKeyword: default,
                     lineNumber: default,
                     columnNumber: default,
@@ -27,9 +27,9 @@ internal sealed class MSBuildNuGetLoggingAdapter(TaskLoggingHelper logger)
             case LogLevel.Warning:
                 logger.LogWarning(
                     message: message.Message,
-                    subcategory: message.GetType().Name,
                     warningCode: message.Code.ToString(),
                     file: message.ProjectPath,
+                    subcategory: default,
                     helpKeyword: default,
                     lineNumber: default,
                     columnNumber: default,
@@ -40,9 +40,9 @@ internal sealed class MSBuildNuGetLoggingAdapter(TaskLoggingHelper logger)
             case LogLevel.Minimal:
                 logger.LogMessage(
                     message: message.Message,
-                    subcategory: message.GetType().Name,
                     code: message.Code.ToString(),
                     file: message.ProjectPath,
+                    subcategory: default,
                     helpKeyword: default,
                     lineNumber: default,
                     columnNumber: default,
@@ -54,9 +54,9 @@ internal sealed class MSBuildNuGetLoggingAdapter(TaskLoggingHelper logger)
             case LogLevel.Information:
                 logger.LogMessage(
                     message: message.Message,
-                    subcategory: message.GetType().Name,
                     code: message.Code.ToString(),
                     file: message.ProjectPath,
+                    subcategory: default,
                     helpKeyword: default,
                     lineNumber: default,
                     columnNumber: default,
@@ -68,9 +68,9 @@ internal sealed class MSBuildNuGetLoggingAdapter(TaskLoggingHelper logger)
             case LogLevel.Verbose:
                 logger.LogMessage(
                     message: message.Message,
-                    subcategory: message.GetType().Name,
                     code: message.Code.ToString(),
                     file: message.ProjectPath,
+                    subcategory: default,
                     helpKeyword: default,
                     lineNumber: default,
                     columnNumber: default,

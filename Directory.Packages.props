@@ -5,16 +5,16 @@
   </PropertyGroup>
   <ItemGroup>
     <GlobalPackageReference Include="Microsoft.SourceLink.GitHub">
-      <Version>10.0.203</Version>
+      <Version>10.0.300</Version>
     </GlobalPackageReference>
     <GlobalPackageReference Include="PolySharp">
-      <Version>1.15.0</Version>
+      <Version>1.16.0</Version>
     </GlobalPackageReference>
   </ItemGroup>
   <ItemGroup>
     <PackageVersion
       Include="Microsoft.Build.Framework;Microsoft.Build.Utilities.Core"
-      Version="18.4.0"
+      Version="18.6.3"
     />
     <PackageVersion
       Include="
@@ -25,7 +25,7 @@
         NuGet.Packaging;
         NuGet.Protocol
         "
-      Version="7.3.1"
+      Version="7.6.0"
     />
   </ItemGroup>
   <ItemGroup>

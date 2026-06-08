@@ -9,7 +9,7 @@
   <PropertyGroup>
     <LangVersion>13</LangVersion>
     <TargetFrameworks Condition="$([System.OperatingSystem]::IsWindows())">net472</TargetFrameworks>
-    <TargetFrameworks>$(TargetFrameworks);net8.0</TargetFrameworks>
+    <TargetFrameworks>$(TargetFrameworks);net10.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -21,13 +21,6 @@
   <PropertyGroup>
     <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);AddNugetBundleFilesToPackage</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="FredrikHr.NupkgMSBuild.PackPackageReference">
-      <PrivateAssets>all</PrivateAssets>
-      <ProjectReference>..\FredrikHr.NupkgMSBuild.PackPackageReference\FredrikHr.NupkgMSBuild.PackPackageReference.csproj</ProjectReference>
-    </PackageReference>
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Build.Framework">
@@ -71,11 +64,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="build\Package.props" Pack="true">
-      <PackagePath>build\$(PackageId).props;buildMultiTargeting\$(PackageId).props</PackagePath>
-    </Content>
-    <Content Include="build\Package.targets" Pack="true">
-      <PackagePath>build\$(PackageId).targets;buildMultiTargeting\$(PackageId).targets</PackagePath>
+    <Content Include="Package.props;Package.targets" Pack="true">
+      <PackagePath>build\$(PackageId)%(Extension);buildMultiTargeting\$(PackageId)%(Extension)</PackagePath>
     </Content>
   </ItemGroup>
 

@@ -24,7 +24,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <LangVersion>13</LangVersion>
+    <LangVersion>14</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -42,6 +42,6 @@
     </None>
   </ItemGroup>
 
-  <Import Project="$(MSBuildThisFileDirectory)build\FredrikHr.NupkgMSBuild.PackPackageReference\build\Package.props" />
+  <Import Project="$(MSBuildThisFileDirectory)build\FredrikHr.NupkgMSBuild.PackPackageReference\Package.props" />
 
 </Project>

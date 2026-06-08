@@ -10,7 +10,7 @@
   <PropertyGroup>
     <NugetPackageAuthorSigningTaskAssembly
       Condition="'$(MSBuildRuntimeType)' == 'Core'"
-    >$(MSBuildThisFileDirectory)..\tasks\net8.0\FredrikHr.NupkgMSBuild.PackageAuthorSigning.dll</NugetPackageAuthorSigningTaskAssembly>
+    >$(MSBuildThisFileDirectory)..\tasks\net10.0\FredrikHr.NupkgMSBuild.PackageAuthorSigning.dll</NugetPackageAuthorSigningTaskAssembly>
     <NugetPackageAuthorSigningTaskAssembly
       Condition="'$(MSBuildRuntimeType)' != 'Core'"
     >$(MSBuildThisFileDirectory)..\tasks\net472\FredrikHr.NupkgMSBuild.PackageAuthorSigning.dll</NugetPackageAuthorSigningTaskAssembly>
