@@ -7,13 +7,16 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <LangVersion>13</LangVersion>
     <TargetFrameworks Condition="$([System.OperatingSystem]::IsWindows())">net472</TargetFrameworks>
     <TargetFrameworks>$(TargetFrameworks);net10.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <NoWarn>$(NoWarn);NU5100;NU5118;NU5128</NoWarn>
+    <EnableDefaultItems>true</EnableDefaultItems>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <NoPackageAnalysis>false</NoPackageAnalysis>
+    <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+    <AutoGenerateAssemblyVersion>true</AutoGenerateAssemblyVersion>
     <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
     <GenerateDependencyFile>true</GenerateDependencyFile>
   </PropertyGroup>

@@ -1,40 +1,16 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Project>
-
-  <PropertyGroup>
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-  </PropertyGroup>
-
-  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Version>1.1.1</Version>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <ImplicitUsings>disable</ImplicitUsings>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <DevelopmentDependency>true</DevelopmentDependency>
-    <IsPackable>true</IsPackable>
-    <NoWarn>$(NoWarn);CS2008;CA1016;NU5128</NoWarn>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <Description>
       Adds a new custom target into the MSBuild pipeline that enables you to pack a PackageReference into the NuGet package of your project.
       This allows you to 'embed' dependencies into your NuGet for scenarios where you need to ship your dependencies bundled with your own package.
 
       You use this feature by adding the Pack=true metadata on a PackageReference item in your project file. Likely, you will also want to add PrivateAssets=all to the same dependency, since bundled dependencies should not be declared as external dependencies for the package.
     </Description>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <EnableDefaultItems>false</EnableDefaultItems>
-    <GenerateDependencyFile>false</GenerateDependencyFile>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
-    <NoPackageAnalysis>true</NoPackageAnalysis>
-    <AutoGenerateAssemblyVersion>false</AutoGenerateAssemblyVersion>
-    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <NoWarn>$(NoWarn);CS2008;CA1016;NU5128</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,13 +18,5 @@
       <PackagePath>build\$(PackageId)%(Extension);buildMultiTargeting\$(PackageId)%(Extension)</PackagePath>
     </Content>
   </ItemGroup>
-
-  <Target Name="GetTargetPath" />
-
-  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
-
-  <PropertyGroup>
-    <Language>Nupkg</Language>
-  </PropertyGroup>
 
 </Project>

@@ -1,35 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Project>
-
-  <PropertyGroup>
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-  </PropertyGroup>
-
-  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Version>1.0.1</Version>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <ImplicitUsings>disable</ImplicitUsings>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <DevelopmentDependency>true</DevelopmentDependency>
-    <IsPackable>true</IsPackable>
-    <NoWarn>$(NoWarn);CS2008;CA1016;NU5128</NoWarn>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <Description>No description provided.</Description>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <EnableDefaultItems>false</EnableDefaultItems>
-    <GenerateDependencyFile>false</GenerateDependencyFile>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
-    <NoPackageAnalysis>true</NoPackageAnalysis>
-    <AutoGenerateAssemblyVersion>false</AutoGenerateAssemblyVersion>
-    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <NoWarn>$(NoWarn);CS2008;CA1016;NU5128</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,13 +13,5 @@
       <PackagePath>build\$(PackageId)%(Extension);buildMultiTargeting\$(PackageId)%(Extension)</PackagePath>
     </Content>
   </ItemGroup>
-
-  <Target Name="GetTargetPath" />
-
-  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
-
-  <PropertyGroup>
-    <Language>Nupkg</Language>
-  </PropertyGroup>
 
 </Project>
