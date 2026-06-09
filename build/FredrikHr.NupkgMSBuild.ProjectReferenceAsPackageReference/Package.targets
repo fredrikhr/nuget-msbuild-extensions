@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+
+  <UsingTask
+    TaskName="ProjectReferenceMissingFromRestoreOutputFoldersTask"
+    TaskFactory="RoslynCodeTaskFactory"
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll"
+  >
+    <ParameterGroup>
+      <ProjectReferences ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+      <RestoreOutputFolders ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+      <MissingProjectReferences ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Code
+        Source="$(MSBuildThisFileDirectory)ProjectReferenceMissingFromRestoreOutputFoldersTask.cs"
+        Language="CS"
+      />
+    </Task>
+  </UsingTask>
+
+  <Target
+    Name="EnsureRestoreFallbackFoldersExist"
+    BeforeTargets="Restore"
+  >
+
+    <ItemGroup>
+      <_RestoreFallbackFolderItem Include="$(RestoreFallbackFolders)">
+        <SourceProperty>RestoreFallbackFolders</SourceProperty>
+      </_RestoreFallbackFolderItem>
+      <_RestoreFallbackFolderItem
+        Include="$(RestoreAdditionalProjectFallbackFolders)"
+        Exclude="$(RestoreAdditionalProjectFallbackFoldersExcludes)"
+      >
+        <SourceProperty>RestoreAdditionalProjectFallbackFolders</SourceProperty>
+      </_RestoreFallbackFolderItem>
+    </ItemGroup>
+
+    <MakeDir Directories="@(_RestoreFallbackFolderItem)" />
+
+  </Target>
+
+  <Target
+    Name="_RestoreAndBuildMissingProjectReferencesAsPackageReferences"
+    BeforeTargets="_GenerateRestoreGraphProjectEntry"
+    DependsOnTargets="_GetRestoreSettings"
+  >
+    <ItemGroup>
+      <_ProjectReferenceAsPackageReference
+        Include="@(PackageReference->HasMetadata('ProjectReference')->'%(ProjectReference)')"
+      >
+        <PackageId>%(PackageReference.Identity)</PackageId>
+      </_ProjectReferenceAsPackageReference>
+      <_ProjectReferenceAsPackageReferenceFolderContainer
+        Include="
+          $(_OutputPackagesPath);
+          $(_OutputFallbackFolders);
+          "
+      />
+    </ItemGroup>
+
+    <MSBuild
+      Projects="@(_ProjectReferenceAsPackageReference)"
+      Targets="_GetProjectVersion"
+    >
+      <Output
+        TaskParameter="TargetOutputs"
+        ItemName="_ProjectReferenceAsPackageReferenceWithProjectVersion"
+      />
+    </MSBuild>
+
+    <ProjectReferenceMissingFromRestoreOutputFoldersTask
+      ProjectReferences="@(_ProjectReferenceAsPackageReferenceWithProjectVersion)"
+      RestoreOutputFolders="@(_ProjectReferenceAsPackageReferenceFolderContainer)"
+    >
+      <Output
+        TaskParameter="MissingProjectReferences"
+        ItemName="_ProjectReferenceAsPackageReferenceMissingFromFolders"
+      />
+    </ProjectReferenceMissingFromRestoreOutputFoldersTask>
+
+    <MSBuild
+      Projects="@(_ProjectReferenceAsPackageReferenceMissingFromFolders)"
+      Condition="'@(_ProjectReferenceAsPackageReferenceMissingFromFolders)' != ''"
+      Targets="Restore"
+      Properties="GenerateInstallToFallbackFolderOnPack=true;RestoreFallbackFolders=$(RestoreFallbackFolders);RestoreAdditionalProjectFallbackFolders=$(RestoreAdditionalProjectFallbackFolders)"
+      RemoveProperties="TargetFramework"
+    />
+    <MSBuild
+      Projects="@(_ProjectReferenceAsPackageReferenceMissingFromFolders)"
+      Condition="'@(_ProjectReferenceAsPackageReferenceMissingFromFolders)' != ''"
+      Targets="Build;Pack"
+      Properties="Configuration=Release;GenerateInstallToFallbackFolderOnPack=true;ExcludeRestorePackageImports=false;MSBuildIsRestoring=false;RestoreFallbackFolders=$(RestoreFallbackFolders);RestoreAdditionalProjectFallbackFolders=$(RestoreAdditionalProjectFallbackFolders)"
+      RemoveProperties="TargetFramework;EnableDefaultCompileItems;EnableDefaultEmbeddedResourceItems;EnableDefaultNoneItems"
+    />
+  </Target>
+
+</Project>
