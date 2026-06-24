@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project>
 
+  <UsingTask
+    TaskName="DiffDirectoryWithZipContents"
+    TaskFactory="RoslynCodeTaskFactory"
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll"
+  >
+    <ParameterGroup>
+      <DestinationFolder ParameterType="Microsoft.Build.Framework.ITaskItem" />
+      <DestinationFolderFiles ParameterType="Microsoft.Build.Framework.ITaskItem[]" />
+      <ZipArchiveFile Required="true" ParameterType="Microsoft.Build.Framework.ITaskItem[]" />
+      <ExtraneousFiles Output="true" ParameterType="Microsoft.Build.Framework.ITaskItem[]" />
+    </ParameterGroup>
+    <Task>
+      <Code Source="$(MSBuildThisFileDirectory)DiffDirectoryWithZipContents.cs" Language="cs" />
+    </Task>
+  </UsingTask>
+
   <Target Name="EnsureNuGetPackOutputFallbackFolderInstallPath"
     BeforeTargets="ResolvePackageAssets"
   >
@@ -86,14 +102,22 @@
         Include="@(NuGetPackOutputWithHash->'$(NuGetPackOutputFallbackFolderInstallPath)\%(Filename)%(Extension).sha512')"
       />
     </ItemGroup>
-    <RemoveDir
-      Directories="$(NuGetPackOutputFallbackFolderInstallPath)"
-      Condition="Exists('$(NuGetPackOutputFallbackFolderInstallPath)')"
-    />
+    <CreateItem Include="$(NuGetPackOutputFallbackFolderInstallPath)\**\*.*">
+      <Output TaskParameter="Include" ItemName="NuGetPackOutputFallbackFolderExistingFile" />
+    </CreateItem>
     <Unzip
       SourceFiles="@(NuGetPackOutput->WithMetadataValue('Extension', '.nupkg'))"
       DestinationFolder="$(NuGetPackOutputFallbackFolderInstallPath)"
+      SkipUnchangedFiles="true"
     />
+    <DiffDirectoryWithZipContents
+      DestinationFolder="$(NuGetPackOutputFallbackFolderInstallPath)"
+      DestinationFolderFiles="@(NuGetPackOutputFallbackFolderExistingFile)"
+      ZipArchiveFile="@(NuGetPackOutput->WithMetadataValue('Extension', '.nupkg'))"
+    >
+      <Output TaskParameter="ExtraneousFiles" ItemName="NuGetPackOutputFallbackFolderExtraneousFile" />
+    </DiffDirectoryWithZipContents>
+    <Delete Files="@(NuGetPackOutputFallbackFolderExtraneousFile)" />
     <!--
     <Copy
       SourceFiles="@(NuGetPackOutput->WithMetadataValue('Extension', '.nupkg'))"
