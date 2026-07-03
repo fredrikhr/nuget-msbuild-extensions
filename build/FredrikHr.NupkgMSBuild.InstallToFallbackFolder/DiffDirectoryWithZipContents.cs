@@ -7,7 +7,6 @@ using System.IO.Compression;
 using System.Linq;
 
 using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
 
 using MSBuildTask = Microsoft.Build.Utilities.Task;
 
@@ -18,13 +17,8 @@ namespace FredrikHr.NupkgMSBuild.InstallToFallbackFolder;
     "CA1819: Properties should not return arrays",
     Justification = nameof(MSBuildTask)
     )]
-[MSBuildMultiThreadableTask]
-public sealed class DiffDirectoryWithZipContents : IMultiThreadableTask
+public sealed class DiffDirectoryWithZipContents : MSBuildTask
 {
-    public TaskEnvironment TaskEnvironment { get; set; } = default!;
-    public IBuildEngine BuildEngine { get; set; } = default!;
-    public ITaskHost HostObject { get; set; } = default!;
-
     public ITaskItem? DestinationFolder { get; set; }
     public ITaskItem[] DestinationFolderFiles { get; set; } = [];
     [Required]
@@ -38,13 +32,12 @@ public sealed class DiffDirectoryWithZipContents : IMultiThreadableTask
         _relativePathKeySelector = GetRelativePath;
     }
 
-    public bool Execute()
+    public override bool Execute()
     {
-        AbsolutePath rootPath = DestinationFolder?.GetMetadata("FullPath") switch
+        string rootPath = DestinationFolder?.GetMetadata("FullPath") switch
         {
-            string fullPath when !string.IsNullOrEmpty(fullPath) =>
-                TaskEnvironment.GetAbsolutePath(fullPath),
-            _ => TaskEnvironment.ProjectDirectory,
+            string fullPath when !string.IsNullOrEmpty(fullPath) => fullPath,
+            _ => Path.GetDirectoryName(BuildEngine.ProjectFileOfTaskNode),
         };
 
         Dictionary<string, ITaskItem> extraneousFiles =
@@ -60,7 +53,7 @@ public sealed class DiffDirectoryWithZipContents : IMultiThreadableTask
                 );
             foreach (ZipArchiveEntry zipEntry in zipArchive.Entries)
             {
-                AbsolutePath zipPath = new(zipEntry.FullName, rootPath);
+                string zipPath = Path.Combine(rootPath, zipEntry.FullName);
                 string zipOsPath = Path.GetFullPath(zipPath);
                 extraneousFiles.Remove(zipOsPath);
             }
@@ -74,6 +67,6 @@ public sealed class DiffDirectoryWithZipContents : IMultiThreadableTask
 
     private string GetRelativePath(ITaskItem item)
     {
-        return TaskEnvironment.GetAbsolutePath(item.GetMetadata("FullPath"));
+        return item.GetMetadata("FullPath");
     }
 }

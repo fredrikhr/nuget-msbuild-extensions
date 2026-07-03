@@ -7,8 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFrameworks Condition="$([System.OperatingSystem]::IsWindows())">net472</TargetFrameworks>
-    <TargetFrameworks>$(TargetFrameworks);net10.0</TargetFrameworks>
+    <TargetFrameworks>net472;net10.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <NoWarn>$(NoWarn);NU5100;NU5118;NU5128</NoWarn>
@@ -19,6 +18,7 @@
     <AutoGenerateAssemblyVersion>true</AutoGenerateAssemblyVersion>
     <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
     <GenerateDependencyFile>true</GenerateDependencyFile>
+    <GenerateInstallToFallbackFolderOnPack>true</GenerateInstallToFallbackFolderOnPack>
   </PropertyGroup>
 
   <PropertyGroup>
