@@ -62,7 +62,7 @@
       <NuGetPackOutputFallbackFolderInstallPath>$(_InstallNupkgFallbackFolderPath)</NuGetPackOutputFallbackFolderInstallPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(_InstallNupkgFallbackFolderPath)' != '' and '$(GenerateInstallToFallbackFolderOnPack)' == 'true'">
-      <NuGetPackOutputFallbackFolderInstallPath>$(_InstallNupkgFallbackFolderPath)\$(PackageId)\$(PackageVersion)</NuGetPackOutputFallbackFolderInstallPath>
+      <NuGetPackOutputFallbackFolderInstallPath>$(_InstallNupkgFallbackFolderPath)\$(PackageId.ToLowerInvariant())\$(PackageVersion.ToLowerInvariant())</NuGetPackOutputFallbackFolderInstallPath>
     </PropertyGroup>
 
     <!--
