@@ -36,4 +36,7 @@
       <Version>1.1.1</Version>
     </PackageVersion>
   </ItemGroup>
+  <ItemGroup>
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
+  </ItemGroup>
 </Project>
