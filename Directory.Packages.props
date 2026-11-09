@@ -8,7 +8,7 @@
       <Version>10.0.403</Version>
     </GlobalPackageReference>
     <GlobalPackageReference Include="PolySharp">
-      <Version>1.16.0</Version>
+      <Version>1.17.0</Version>
     </GlobalPackageReference>
   </ItemGroup>
   <ItemGroup>
